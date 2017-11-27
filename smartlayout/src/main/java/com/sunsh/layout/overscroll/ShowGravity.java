@@ -39,9 +39,9 @@ public class ShowGravity {
     int headerShowGravity = FOLLOW;
     int footerShowGravity = FOLLOW;
 
-    private OverscrollLayout prl;
+    private OverScrollLayout prl;
 
-    ShowGravity(OverscrollLayout pullRefreshLayout) {
+    ShowGravity(OverScrollLayout pullRefreshLayout) {
         this.prl = pullRefreshLayout;
     }
 

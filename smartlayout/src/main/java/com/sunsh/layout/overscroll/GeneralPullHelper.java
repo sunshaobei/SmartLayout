@@ -14,7 +14,7 @@ import android.view.ViewParent;
  * Created by sunsh on 2017/11/16.
  */
 class GeneralPullHelper {
-    private final OverscrollLayout prl;
+    private final OverScrollLayout prl;
 
     /**
      * default values
@@ -106,7 +106,7 @@ class GeneralPullHelper {
      */
     private VelocityTracker velocityTracker;
 
-    GeneralPullHelper(OverscrollLayout pullRefreshLayout, Context context) {
+    GeneralPullHelper(OverScrollLayout pullRefreshLayout, Context context) {
         this.prl = pullRefreshLayout;
         ViewConfiguration configuration = ViewConfiguration.get(context);
         minimumFlingVelocity = configuration.getScaledMinimumFlingVelocity();

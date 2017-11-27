@@ -15,7 +15,7 @@ import java.lang.reflect.Constructor;
 /**
  * Created by sunsh on 2017/11/16.
  */
-public class OverscrollUtils {
+public class OverScrollUtils {
 
     /**
      * @return Whether it is possible for the child view of this layout to

@@ -175,7 +175,7 @@
     </declare-styleable>
 
 
-    <declare-styleable name="OverscrollLayout">
+    <declare-styleable name="OverScrollLayout">
         <attr name="prl_refreshEnable" format="boolean" />
         <attr name="prl_loadMoreEnable" format="boolean" />
         <attr name="prl_twinkEnable" format="boolean" />

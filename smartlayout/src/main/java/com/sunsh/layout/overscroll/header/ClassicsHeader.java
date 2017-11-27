@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 
 import com.sunsh.layout.overscroll.NestedRelativeLayout;
-import com.sunsh.layout.overscroll.OverscrollLayout;
-import com.sunsh.layout.overscroll.OverscrollUtils;
+import com.sunsh.layout.overscroll.OverScrollLayout;
+import com.sunsh.layout.overscroll.OverScrollUtils;
 import com.sunsh.layout.overscroll.pathview.ProgressDrawable;
 import com.sunsh.smartlayout.R;
 
@@ -30,7 +30,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * 经典下拉头部
  * Created by sunsh on 2017/5/28.
  */
-public class ClassicsHeader extends NestedRelativeLayout implements OverscrollLayout.OnPullListener {
+public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLayout.OnPullListener {
 
     public static String REFRESH_HEADER_PULLDOWN = "下拉可以刷新";
     public static String REFRESH_HEADER_REFRESHING = "正在刷新...";
@@ -54,7 +54,7 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverscrollLa
     }
 
     protected void initView(Context context, AttributeSet attrs) {
-        setMinimumHeight(OverscrollUtils.dipToPx(getContext(), 80));
+        setMinimumHeight(OverScrollUtils.dipToPx(getContext(), 80));
         LinearLayout layout = new LinearLayout(context);
         layout.setId(android.R.id.widget_frame);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -72,8 +72,8 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverscrollLa
 
         mProgressView = new ImageView(context);
         mProgressView.animate().setInterpolator(new LinearInterpolator());
-        RelativeLayout.LayoutParams lpProgress = new RelativeLayout.LayoutParams(OverscrollUtils.dipToPx(getContext(), 20), OverscrollUtils.dipToPx(getContext(), 20));
-        lpProgress.rightMargin = OverscrollUtils.dipToPx(getContext(), 20);
+        RelativeLayout.LayoutParams lpProgress = new RelativeLayout.LayoutParams(OverScrollUtils.dipToPx(getContext(), 20), OverScrollUtils.dipToPx(getContext(), 20));
+        lpProgress.rightMargin = OverScrollUtils.dipToPx(getContext(), 20);
         lpProgress.addRule(CENTER_VERTICAL);
         lpProgress.addRule(LEFT_OF, android.R.id.widget_frame);
         addView(mProgressView, lpProgress);
@@ -177,5 +177,15 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverscrollLa
     public void onPullReset() {
         Log.e("onPullReset", "onPullReset: ");
         onPullHoldUnTrigger();
+    }
+
+    @Override
+    public void setNoMore(boolean b) {
+
+    }
+
+    @Override
+    public void loadMoreComplete(boolean b) {
+
     }
 }
