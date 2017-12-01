@@ -2,7 +2,10 @@ package com.sunsh.layout.overscroll.header;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.sunsh.layout.overscroll.NestedRelativeLayout;
 import com.sunsh.layout.overscroll.OverScrollLayout;
 import com.sunsh.layout.overscroll.OverScrollUtils;
 import com.sunsh.layout.overscroll.pathview.ProgressDrawable;
 import com.sunsh.smartlayout.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -38,23 +44,31 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLa
     public static String REFRESH_HEADER_FINISH = "刷新完成";
     public static String REFRESH_HEADER_FAILED = "刷新失败";
 
+
+    private Date mLastTime;
     protected TextView mHeaderText;
+    protected TextView mLastUpdateText;
     protected ImageView mArrowView;
     protected ImageView mProgressView;
     protected ProgressDrawable mProgressDrawable;
+    private DateFormat mFormat = new SimpleDateFormat("上次更新 M-d HH:mm", Locale.CHINA);
+    private OverScrollLayout overScrollLayout;
 
-    public ClassicsHeader(Context context) {
-        super(context);
-        this.initView(context, null);
+    public ClassicsHeader(OverScrollLayout overScrollLayout) {
+        super(overScrollLayout.getContext());
+        this.overScrollLayout = overScrollLayout;
+        this.initView(overScrollLayout.getContext(),null);
     }
 
-    public ClassicsHeader(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.initView(context, attrs);
+    public ClassicsHeader(OverScrollLayout overScrollLayout, String simpleNmae, AttributeSet attrs) {
+        super(overScrollLayout.getContext(), attrs);
+        this.overScrollLayout = overScrollLayout;
+        this.initView(overScrollLayout.getContext(),attrs);
     }
 
     protected void initView(Context context, AttributeSet attrs) {
         setMinimumHeight(OverScrollUtils.dipToPx(getContext(), 80));
+
         LinearLayout layout = new LinearLayout(context);
         layout.setId(android.R.id.widget_frame);
         layout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -64,8 +78,14 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLa
         mHeaderText.setTextColor(Color.parseColor("#666666"));
         mHeaderText.setTextSize(16);
 
+        mLastUpdateText = new TextView(context);
+        mLastUpdateText.setTextColor(Color.parseColor("#666666"));
+        mLastUpdateText.setTextSize(12);
         LinearLayout.LayoutParams lpHeaderText = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
         layout.addView(mHeaderText, lpHeaderText);
+        LinearLayout.LayoutParams lpUpdateText = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        layout.addView(mLastUpdateText, lpUpdateText);
+
         RelativeLayout.LayoutParams lpHeaderLayout = new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
         lpHeaderLayout.addRule(CENTER_IN_PARENT);
         addView(layout, lpHeaderLayout);
@@ -88,7 +108,6 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLa
             mProgressView.setVisibility(GONE);
         }
 
-
         mArrowView.setImageResource(R.drawable.rl_arrow_down);
 
 
@@ -103,6 +122,7 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLa
                 if (manager != null) {
                     @SuppressLint("RestrictedApi") List<Fragment> fragments = manager.getFragments();
                     if (fragments != null && fragments.size() > 0) {
+                        setLastUpdateTime(new Date());
                         return;
                     }
                 }
@@ -110,9 +130,54 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLa
         } catch (Throwable e) {
             e.printStackTrace();
         }
-
+        setLastUpdateTime(new Date(System.currentTimeMillis()));
     }
 
+    //<editor-fold desc="API">
+    public ClassicsHeader setProgressBitmap(Bitmap bitmap) {
+        mProgressDrawable = null;
+        mProgressView.setImageBitmap(bitmap);
+        return this;
+    }
+
+    public ClassicsHeader setProgressDrawable(Drawable drawable) {
+        mProgressDrawable = null;
+        mProgressView.setImageDrawable(drawable);
+        return this;
+    }
+
+    public ClassicsHeader setProgressResource(@DrawableRes int resId) {
+        mProgressDrawable = null;
+        mProgressView.setImageResource(resId);
+        return this;
+    }
+
+    public ClassicsHeader setArrowBitmap(Bitmap bitmap) {
+        mArrowView.setImageBitmap(bitmap);
+        return this;
+    }
+
+    public ClassicsHeader setArrowDrawable(Drawable drawable) {
+        mArrowView.setImageDrawable(drawable);
+        return this;
+    }
+
+    public ClassicsHeader setArrowResource(@DrawableRes int resId) {
+        mArrowView.setImageResource(resId);
+        return this;
+    }
+
+    public ClassicsHeader setLastUpdateTime(Date time) {
+        mLastTime = time;
+        mLastUpdateText.setText(mFormat.format(time));
+        return this;
+    }
+
+    public ClassicsHeader setTimeFormat(DateFormat format) {
+        mFormat = format;
+        mLastUpdateText.setText(mFormat.format(mLastTime));
+        return this;
+    }
 
     @Override
     public void onPullChange(float percent) {
@@ -171,6 +236,7 @@ public class ClassicsHeader extends NestedRelativeLayout implements OverScrollLa
             mHeaderText.setText(REFRESH_HEADER_FINISH);
         }
         mProgressView.setVisibility(GONE);
+        setLastUpdateTime(new Date());
     }
 
     @Override
