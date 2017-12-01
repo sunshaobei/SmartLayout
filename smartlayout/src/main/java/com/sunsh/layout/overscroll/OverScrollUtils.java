@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 
+import com.sunsh.layout.overscroll.footer.ClassicHoldLoadView;
+import com.sunsh.layout.overscroll.footer.ClassicsFooter;
+import com.sunsh.layout.overscroll.header.ClassicsHeader;
+
 import java.lang.reflect.Constructor;
 
 /**
@@ -93,5 +97,20 @@ public class OverScrollUtils {
             }
         }
         return null;
+    }
+
+
+    public static void defaultConfigPullLoad(OverScrollLayout overScrollLayout){
+        overScrollLayout.setHeaderView(new ClassicsHeader(overScrollLayout));
+        overScrollLayout.setFooterView(new ClassicsFooter(overScrollLayout.getContext(),overScrollLayout));
+        overScrollLayout.setLoadMoreEnable(true);
+        overScrollLayout.setLoadTriggerDistance((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, overScrollLayout.getContext().getResources().getDisplayMetrics()));
+    }
+    public static void defaultConfigAutoLoad(OverScrollLayout overScrollLayout){
+        overScrollLayout.setHeaderView(new ClassicsHeader(overScrollLayout));
+        overScrollLayout.setFooterView(new ClassicHoldLoadView(overScrollLayout.getContext(),overScrollLayout));
+        overScrollLayout.setAutoLoadingEnable(true);
+        overScrollLayout.setLoadMoreEnable(true);
+        overScrollLayout.setLoadTriggerDistance((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, overScrollLayout.getContext().getResources().getDisplayMetrics()));
     }
 }
